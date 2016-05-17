@@ -31,6 +31,9 @@ var showQuestion = function(question) {
 	return result;
 };
 
+var showUsers = Object.create(showQuestion);
+
+
 
 // this function takes the results object from StackOverflow
 // and returns the number of results and tags to be appended to DOM
@@ -82,6 +85,23 @@ var getUnanswered = function(tags) {
 };
 
 
+var getUsers = Object.create(getUnanswered, {
+ 
+
+	$.ajax({
+		url: "http://api.stackexchange.com/2.2/questions/unanswered",
+		data: request,
+		dataType: "jsonp",//use jsonp to avoid cross origin issues
+		type: "GET",
+	})
+
+
+
+
+
+});
+
+
 $(document).ready( function() {
 	$('.unanswered-getter').submit( function(e){
 		e.preventDefault();
@@ -91,4 +111,15 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='tags']").val();
 		getUnanswered(tags);
 	});
+
+$('.inspiration-getter').submit( function(e){
+		e.preventDefault();
+		// zero out results if previous search has run
+		$('.results').html('');
+		// get the value of the tags the user submitted
+		var tags = $(this).find("input[name='answerers']").val();
+		getUsers(tags);
+	});
+
+
 });
