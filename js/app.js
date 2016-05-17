@@ -32,6 +32,7 @@ var showQuestion = function(question) {
 };
 
 var showUsers = Object.create(showQuestion);
+// change displayed elements for inspiration-getter 
 
 
 
@@ -87,16 +88,7 @@ var getUnanswered = function(tags) {
 
 var getUsers = Object.create(getUnanswered, {
  
-
-	$.ajax({
-		url: "http://api.stackexchange.com/2.2/questions/unanswered",
-		data: request,
-		dataType: "jsonp",//use jsonp to avoid cross origin issues
-		type: "GET",
-	})
-
-
-
+// add .ajax url here?
 
 
 });
