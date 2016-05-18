@@ -31,23 +31,8 @@ var showQuestion = function(question) {
 	return result;
 };
 
-var showUsers = function(tags) {
-	
-	// clone our result template code
-	var result = $('.templates .user').clone();
-
-	// set some properties related to asker
-	var asker = result.find('.asker');
-	asker.html('<p>Name: <a target="_blank" '+
-		'href=http://stackoverflow.com/users/' + tags.user.user_id + ' >' +
-		tags.user.display_name +
-		'</a></p>' +
-		'<p>User ID: ' + tags.user.user_id + '</p>' +
-		'<p>Number of Posts: ' + tags.post_count + '</p>'
-	);
-
-	return result;
-};
+var showUsers = Object.create(showQuestion);
+// change displayed elements for inspiration-getter 
 
 
 
@@ -100,38 +85,13 @@ var getUnanswered = function(tags) {
 	});
 };
 
-var getUsers = function(tags) {
-	
-	// the parameters we need to pass in our request to StackOverflow's API
-	var request = { 
-		tagged: tags,
-		site: 'stackoverflow',
-		order: 'desc',
-		sort: 'creation'
-	};
-	
-	$.ajax({
-		url: "http://api.stackexchange.com/2.2/tags/"+tags+"/top-answerers/all_time",
-		data: request,
-		dataType: "jsonp",//use jsonp to avoid cross origin issues
-		type: "GET",
-	})
-	.done(function(result){ //this waits for the ajax to return with a succesful promise object
-		var searchResults = showSearchResults(request.tagged, result.items.length);
 
-		$('.search-results').html(searchResults);
-		//$.each is a higher order function. It takes an array and a function as an argument.
-		//The function is executed once for each item in the array.
-		$.each(result.items, function(i, item) {
-			var question = showUsers(item);
-			$('.results').append(question);
-		});
-	})
-	.fail(function(jqXHR, error){ //this waits for the ajax to return with an error promise object
-		var errorElem = showError(error);
-		$('.search-results').append(errorElem);
-	});
-};
+var getUsers = Object.create(getUnanswered, {
+ 
+// add .ajax url here?
+
+
+});
 
 
 $(document).ready( function() {
@@ -144,7 +104,7 @@ $(document).ready( function() {
 		getUnanswered(tags);
 	});
 
-	$('.inspiration-getter').submit( function(e){
+$('.inspiration-getter').submit( function(e){
 		e.preventDefault();
 		// zero out results if previous search has run
 		$('.results').html('');
@@ -152,8 +112,6 @@ $(document).ready( function() {
 		var tags = $(this).find("input[name='answerers']").val();
 		getUsers(tags);
 	});
-
-
 
 
 });
